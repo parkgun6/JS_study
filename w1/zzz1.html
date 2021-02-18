@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button>btn1</button>
+<button>btn2</button>
+<button>btn3</button>
+<script>
+
+    function doA(){
+
+        const btns = document.querySelectorAll("button");
+
+        function addEvent(ele, num){
+            console.log(ele, num);
+            ele.addEventListener("click",function (){
+                alert(i)
+            },false)
+        }
+
+        for (var i = 0; i < btns.length; i++){
+            addEvent(btns[i],i);
+        }
+
+    }doA();
+
+</script>
+</body>
+</html>

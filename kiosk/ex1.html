@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .container > img {
+        width: 300px;
+        height: 200px;
+        margin: 30px;
+    }
+</style>
+    <h1>Ex1</h1>
+        <div class="container">
+            <img src="img/1.png" class="item" data-name="햄버거1" data-price="\1,000">
+            <img src="img/2.png" class="item" data-name="햄버거2" data-price="\2,000">
+            <img src="img/3.png" class="item" data-name="햄버거3" data-price="\3,000">
+        </div>
+<script>
+
+    document.querySelector(".container")
+    .addEventListener("click", function (e){
+        // console.log("click");
+        const target = e.target;
+
+        if(target.getAttribute("class") !== 'item'){
+            return;
+        }
+        console.log(target);
+
+        const name = target.getAttribute("date-name");
+        const price = target.getAttribute("date-price");
+        console.log(name, price);
+    },false);
+
+</script>
+
+</body>
+</html>

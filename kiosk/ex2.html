@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+    .menus {
+        background-color: aquamarine;
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        justify-content: center;
+    }
+    .menu {
+        margin-left: 5em;
+        border: 1px solid black;
+    }
+    .board {
+        background-color: gray;
+        height: 100vh;
+        position: relative;
+    }
+    .container {
+        width: 100vw;
+        height: 100vh;
+        background-color: yellow;
+        position: absolute;
+        z-index: 10;
+    }
+    .container:nth-child(1) {
+        background-color: red;
+    }
+    .container:nth-child(2) {
+        background-color: orange;
+    }
+    .container:nth-child(3) {
+        background-color: yellow;
+    }
+    .container:nth-child(4) {
+        background-color: green;
+    }
+    .front {
+        z-index: 100;
+    }
+</style>
+<div class="outer">
+    <div class="menus">
+        <div class="menu" data-idx="0">Burger</div>
+        <div class="menu" data-idx="1">Side</div>
+        <div class="menu" data-idx="2">Drink</div>
+        <div class="menu" data-idx="3">Dessert</div>
+    </div>
+    <div class="board">
+        <div class="container front">
+
+        </div>
+        <div class="container">
+
+        </div>
+        <div class="container">
+
+        </div>
+        <div class="container">
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const containers = document.querySelectorAll(".container");
+
+    document.querySelector(".menus")
+        .addEventListener("click", function (e){
+
+            const target = e.target;
+
+            const idx = target.getAttribute("data-idx");
+
+            console.log(idx);
+
+            for (const container of containers) {
+                container.setAttribute("class","container");
+            }
+
+            containers[idx].setAttribute("class","container front");
+
+        }, false)
+
+</script>
+
+</body>
+</html>
