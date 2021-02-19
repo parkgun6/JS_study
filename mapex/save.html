@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function piggySave(){
+        var total = 0;
+
+        function add(money){
+            total += money;
+        }
+        function show(){
+            console.log("total : " + total);
+        }
+        return {add:add, show:show};
+    }
+
+    function Piggy(){
+        this.total = 0;
+
+        this.add = function add(money){
+            this.total += money;
+        }
+        this.show = function show() {
+            console.log("total : " + total);
+        }
+    }
+
+    class Piggy1{
+        constructor(){
+            this.total = 0;
+        }
+        function add(money){
+            this.total += money;
+        }
+    }
+
+    var s1 = piggySave();
+    s1.add(100);
+    s1.add(200);
+    s1.show();
+
+    var s2 = new piggy();
+    s2.add(1000);
+    s2.show();
+
+</script>
+
+</body>
+</html>

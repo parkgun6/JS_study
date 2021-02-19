@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button class="btn">Get Weather</button>
+<div id="demo"></div>
+<script>
+
+    document.querySelector(".btn")
+    .addEventListener("click",function (e){
+        console.log("clicked.........");
+        // loadDoc();
+
+        var demo = document.querySelector("#demo");
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+
+            if (this.readyState == 4 && this.status == 200) {
+                demo.innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", "list.html", true);
+        xhttp.send();
+    },false);
+</script>
+</body>
+</html>

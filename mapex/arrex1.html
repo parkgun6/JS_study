@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button name="btn">button</button>
+<script>
+
+    var arr = new Array();
+
+    arr.push("AAA");
+    arr.push("BBB");
+    arr.push("CCC");
+
+    console.dir(arr);
+
+    console.log(arr[0]);
+    console.log(arr["0"]);
+
+    // var obj = {};
+    // obj.name = "Hong";
+    // obj.age = 16;
+
+    window.name = "zzz";
+    //객체 리터럴
+    var obj = {name:"Hong", age:16};
+
+    function showName(){
+        console.log(this.name);
+    };
+    showName();
+    showName.apply(obj);
+    obj.showName = showName;
+
+    console.log(obj);
+    console.dir(obj);
+
+    showName();
+    obj.showName();
+
+    document.querySelector("button")
+    .addEventListener("click",showName,false)
+
+</script>
+</body>
+</html>

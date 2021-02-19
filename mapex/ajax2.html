@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<button class="btn">button</button>
+<body>
+<script>
+    document.querySelector(".btn")
+        .addEventListener("click",function (){
+            console.log("clicked.........");
+            // loadDoc();
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+
+                if (this.readyState == 4 && this.status == 200) {
+                   var str = this.responseText;
+                   console.log(str);
+                   var obj = JSON.parse(str);//문자열을 오브젝트로변환
+                   console.log(obj);
+                }
+            };
+            xhttp.open("GET", "s1.json", true);
+            xhttp.send();
+        },false);
+</script>
+</body>
+</html>

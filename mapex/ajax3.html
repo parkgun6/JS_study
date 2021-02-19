@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="btnContainer">
+    <button data-idx="s1">S1</button>
+    <button data-idx="s2">S2</button>
+    <button data-idx="s3">S3</button>
+    <button data-idx="s4">S4</button>
+</div>
+
+<ul class="listContainer">
+
+</ul>
+    <!-- 지도를 표시할 div 입니다 -->
+    <div id="map" style="width:100%;height:50vh;"></div>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d183e7ead3f34d35c44545aaa0da8909"></script>
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(37.503005, 127.024231), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+</script>
+
+<script>
+    document.querySelector(".btnContainer").addEventListener("click"
+        , function(e){
+            // 원하는 버튼 구하기
+            var targetbutton = e.target;
+            // json 파일 이름
+            var targetFile = targetbutton.getAttribute("data-idx") +".json";
+            console.log(targetFile);
+
+            // 출력하는 방법 2가지
+            // 1. createElement
+            // 2. innerHTML (성능이 더 좋으다 -> DOM처리를 한번만 하면 되기 때문)
+
+            //html추가
+            var ul = document.querySelector("ul");
+
+            // AJAX 설정, JSON 파일
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var str = this.responseText;
+                    var objarr = JSON.parse(str);//문자열을 오브젝트로변환
+                    console.log(objarr);
+
+                    // li 만들기
+                    var temp = "";
+                    for(var i = 0; i < objarr.length; ++i){
+                        var tempobj = objarr[i];
+                        temp += "<li data-lat='"+ tempobj.lat + "' data-lng='"
+                        + tempobj.lng + "' data-name='" + tempobj.name + "'>"
+                            + tempobj.name + "</li>";
+
+                    }
+                    console.log("temp", temp);
+
+                    // ul에 넣기
+                    ul.innerHTML = temp;
+                }
+            };
+            xhttp.open("GET", "http://192.168.0.147:8080/api/list", true);
+            xhttp.send();
+        }
+    , false);
+
+    // list마다 이벤트 추가하기
+    // ".listContainer li"로 하면 안된다.
+    // 왜냐하면 script가 실행될때 DOM이 완성되어 있지 않아서
+    // 여기에 경도와 위도를 넣자...
+    document.querySelector(".listContainer").addEventListener("click", (e) => {
+        var target = e.target;
+        var lat = target.getAttribute("data-lat");
+        var lng = target.getAttribute("data-lng");
+        var name = target.getAttribute("data-name");
+        console.log(lat,lng,name)
+        // 이동할 위도 경도 위치를 생성합니다
+        var moveLatLon = new kakao.maps.LatLng(lat,lng);
+
+        // 지도 중심을 부드럽게 이동시킵니다
+        // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+        map.panTo(moveLatLon);
+    }, false);
+
+
+
+</script>
+
+
+</body>
+</html>
