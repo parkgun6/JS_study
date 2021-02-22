@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="addDiv">
+    <input name="title">
+    <button class="addBtn">ADD</button>
+</div>
+
+<ul class="todoUL">
+
+</ul>
+
+<!--Service 웹앱의 상태를 관리한다.-->
+<script>
+    //클로져와 객체리터럴을 같이 사용하는 방식
+    let todoService = (function (){
+        //인스턴스객체
+        let todos = []
+
+        function add(todo){
+            todos.push(todo)
+            console.log(todos);
+       }
+
+       function remove(idx){
+            todos.splice(idx,1)
+       }
+        //싱글톤
+        //객체지향에 가까운 방법이다.
+       function getList(){
+            return todos;
+       }
+
+       return {add:add, remove:remove, getList:getList};
+    }())
+
+</script>
+
+<!--UI-->
+<script>
+
+    $(document).ready(function (){
+        const input = $("input[name='title']")
+        const addBtn = $(".addBtn")
+        const todoUL = $(".todoUL")
+
+        addBtn.on("click", function (){
+
+            const titleStr = input.val()
+
+            console.log(titleStr)
+
+            todoService.add(titleStr)
+
+            input.val("")
+
+            showList()
+        });
+
+        function showList(){
+            let todos = todoService.getList();
+            //배열이 쌓이기때문에 매번 초기화해준다.
+            todoUL.html("")
+            var idx = 0;
+            for (const todoStr of todos) {
+                console.log(todoStr)
+                //html append와는 다른개념이다
+                todoUL.append("<li data-idx='"+ idx++ +"'><button class='delBtn'>DEL</button>"+todoStr+"" +"</li>")
+            }
+        }
+
+        todoUL.on("click", ".delBtn", function (e){
+
+            console.log(e);
+            //근처에 있는 객체를 찾아가는것 closest
+            const liObj = $(this).closest("li");
+            const idx = liObj.data("idx");
+            console.log(liObj,idx);
+            todoService.remove(idx);
+            todoService.getList();
+        });
+    })
+
+</script>
+
+
+</body>
+</html>
