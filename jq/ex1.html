@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+    }
+    .container {
+        width: 300px;
+        background-color: red;
+        display: none;
+    }
+</style>
+
+<button class="hide">HIDE</button>
+<button class="show">SHOW</button>
+
+<ul class="container">
+    <li>AAA</li>
+</ul>
+
+<script>
+    $(document).ready(function (){
+        const ul = $(".container");
+
+        $(".show").on("click",function (){
+
+            //url에서 제이슨데이터를 가져온다.
+            //데이터를 가져오면 데이터를 넣은 함수를 실행시킨다.
+            $.getJSON("http://swapi.dev/api/planets/1/",function (data){
+                console.log(data);
+                ul.show('slow');
+            })
+
+        });
+
+        $(".hide").on("click",function (){
+           ul.hide('slow');
+
+
+        });
+
+        //게터와 세터가 공존한다.
+        //자바스크립트의 특징은 오버로딩이 불가능하다.
+        //파라미터의 제약을 받지 않기 때문이다.
+        ul.html("<li>AAA</li>");//innerHTML
+        console.log(ul.html());
+
+        console.log(ul.attr("class"));
+
+        ul.attr("class","container show");
+
+    });
+</script>
+
+</body>
+</html>
