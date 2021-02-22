@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+
+    // function getData(task, time, fn){
+    //     setTimeout(function (){
+    //         console.log(task);
+    //         if(fn){
+    //             fn();
+    //         }
+    //     },time);
+    // }
+    //
+    // getData("A",3000,
+    //     function (){
+    //     getData("B",2000,
+    //         function (){
+    //         getData("C",1000);
+    //     });
+    // });
+
+</script>
+
+<script>
+
+    function getData(task, time){
+        //getdata를 호출하면 프로미스 리턴값이 나온다.
+        //성공시 resolve, 실패시 reject
+        return new Promise(function (resolve,reject){
+           setTimeout(function (){
+               console.log(task)
+               resolve();
+               },time);
+        });
+    }
+
+    getData("A",3000)
+        .then(function (){getData("B",2000)
+            .then(function (){getData("C",1000)})})
+
+
+</script>
+
+</body>
+</html>

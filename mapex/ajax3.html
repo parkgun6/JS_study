@@ -6,20 +6,23 @@
 </head>
 <body>
 
+<button id="sbtn">Send Button</button>
+
+
 <div class="btnContainer">
-    <button data-idx="s1">S1</button>
-    <button data-idx="s2">S2</button>
-    <button data-idx="s3">S3</button>
-    <button data-idx="s4">S4</button>
+    <button data-idx="http://192.168.0.147:8080/api/list">디저트카페</button>
+    <button data-idx="http://192.168.0.162:8080/api/list">편의점</button>
+    <button data-idx="http://192.168.0.138:8080/api/list">병원</button>
+    <button data-idx="http://192.168.0.163:8080/api/list">코인노래방</button>
 </div>
 
 <ul class="listContainer">
 
 </ul>
-    <!-- 지도를 표시할 div 입니다 -->
-    <div id="map" style="width:100%;height:50vh;"></div>
+<!-- 지도를 표시할 div 입니다 -->
+<div id="map" style="width:100%;height:50vh;"></div>
 
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d183e7ead3f34d35c44545aaa0da8909"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d183e7ead3f34d35c44545aaa0da8909"></script>
 <script>
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
@@ -29,15 +32,35 @@
 
     // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
     var map = new kakao.maps.Map(mapContainer, mapOption);
+    map.markerArr = [];
 </script>
 
 <script>
+
+    document.querySelector("#sbtn")
+        .addEventListener("click", function () {
+
+            var data = [
+                {name:"빅맥",qty:1},
+                {name:"감자튀김",qty:2},
+                {name:"콜라",qty:1}
+                ];
+
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            var theUrl = "http://localhost:8080/api/add";
+            xmlhttp.open("POST", theUrl);
+            xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlhttp.send(JSON.stringify(data));
+
+        }, false)
+
+
     document.querySelector(".btnContainer").addEventListener("click"
-        , function(e){
+        , function (e) {
             // 원하는 버튼 구하기
             var targetbutton = e.target;
             // json 파일 이름
-            var targetFile = targetbutton.getAttribute("data-idx") +".json";
+            var targetFile = targetbutton.getAttribute("data-idx");
             console.log(targetFile);
 
             // 출력하는 방법 2가지
@@ -49,18 +72,28 @@
 
             // AJAX 설정, JSON 파일
             var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
+            xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
+
+
+                    clearMarkers();
+
+
                     var str = this.responseText;
                     var objarr = JSON.parse(str);//문자열을 오브젝트로변환
+
+
+                    makeMarkers(objarr);
+
+
                     console.log(objarr);
 
                     // li 만들기
                     var temp = "";
-                    for(var i = 0; i < objarr.length; ++i){
+                    for (var i = 0; i < objarr.length; ++i) {
                         var tempobj = objarr[i];
-                        temp += "<li data-lat='"+ tempobj.lat + "' data-lng='"
-                        + tempobj.lng + "' data-name='" + tempobj.name + "'>"
+                        temp += "<li data-lat='" + tempobj.lat + "' data-lng='"
+                            + tempobj.lng + "' data-name='" + tempobj.name + "'>"
                             + tempobj.name + "</li>";
 
                     }
@@ -70,10 +103,11 @@
                     ul.innerHTML = temp;
                 }
             };
-            xhttp.open("GET", "http://192.168.0.147:8080/api/list", true);
+            xhttp.open("GET", targetFile, true);
             xhttp.send();
         }
-    , false);
+        , false);
+
 
     // list마다 이벤트 추가하기
     // ".listContainer li"로 하면 안된다.
@@ -84,9 +118,9 @@
         var lat = target.getAttribute("data-lat");
         var lng = target.getAttribute("data-lng");
         var name = target.getAttribute("data-name");
-        console.log(lat,lng,name)
+        console.log(lat, lng, name)
         // 이동할 위도 경도 위치를 생성합니다
-        var moveLatLon = new kakao.maps.LatLng(lat,lng);
+        var moveLatLon = new kakao.maps.LatLng(lat, lng);
 
         // 지도 중심을 부드럽게 이동시킵니다
         // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
@@ -94,7 +128,26 @@
     }, false);
 
 
+    function clearMarkers() {
+        for (var i = 0; i < map.markerArr.length; i++) {
+            map.markerArr[i].setMap(null);
+        }
+        map.markerArr = [];
+    }
 
+    function makeMarkers(objarr) {
+
+        for (const store of objarr) {
+            let store = objarr[i];
+            // 마커를 생성합니다
+            let marker = new kakao.maps.Marker({
+                map: map, // 마커를 표시할 지도
+                position: new kakao.maps.LatLng(store.lat, store.lng), // 마커를 표시할 위치
+                title: store.name, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            });
+            map.markerArr.push(marker);
+        }
+    }
 </script>
 
 
