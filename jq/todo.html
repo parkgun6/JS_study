@@ -11,6 +11,13 @@
     <input name="title">
     <button class="addBtn">ADD</button>
 </div>
+<style>
+    .todoUL {
+        width: 100%;
+        height: 200px;
+        background-color: yellow;
+    }
+</style>
 
 <ul class="todoUL">
 
@@ -37,7 +44,12 @@
             return todos;
        }
 
-       return {add:add, remove:remove, getList:getList};
+       function update(idx,todo){
+            remove(idx)
+            add(todo)
+       }
+
+       return {add:add, remove:remove, getList:getList, update:update};
     }())
 
 </script>
@@ -50,14 +62,23 @@
         const addBtn = $(".addBtn")
         const todoUL = $(".todoUL")
 
-        addBtn.on("click", function (){
+        addBtn.on("click", function (e){
 
             const titleStr = input.val()
 
             console.log(titleStr)
 
-            todoService.add(titleStr)
+            if(e.target.innerHTML === 'ADD'){
 
+                todoService.add(titleStr)
+
+            }else{
+                const idx = input.data("idx")
+                const todo = input.val()
+                todoService.update(idx, todo)
+                addBtn.text("ADD")
+
+            }
             input.val("")
 
             showList()
@@ -76,14 +97,27 @@
         }
 
         todoUL.on("click", ".delBtn", function (e){
-
-            console.log(e);
+            e.stopPropagation()
+            console.log(this);
             //근처에 있는 객체를 찾아가는것 closest
             const liObj = $(this).closest("li");
             const idx = liObj.data("idx");
             console.log(liObj,idx);
             todoService.remove(idx);
             todoService.getList();
+            showList()
+        });
+
+        todoUL.on("click","li",function (){
+            let liObj = $(this).clone()
+
+            liObj.find("button").remove();
+
+            const idx = liObj.data("idx");
+
+            input.val(liObj.text()).attr("data-idx",idx)
+
+            addBtn.text("MOD")
         });
     })
 
