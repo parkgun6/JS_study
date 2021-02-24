@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<script>
+    //이클립스에  name이 String이기 때문에 "를 쓰지않았다.
+    const data = [{name:"1", qty:1},{name:"2", qty:2}]
+
+    $.ajax({
+        url : "http://127.0.0.1:8080/api/add",
+        type : 'POST',
+        data : JSON.stringify(data),
+        contentType : "application/json",
+        dataType : "json"
+    })
+</script>
+
+
+</body>
+</html>
