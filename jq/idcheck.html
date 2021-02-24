@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<input name="userId" value="user00">
+<button class="checkBtn">아이디 중복 체크</button>
+
+<script>
+
+    $(document).ready(function (){
+        $(".checkBtn").on("click", function (){
+            //객체리터럴
+            const data = {tempId: $("input[name='userId']").val(), username:"AAA"}
+            console.log(data)
+            //1번째는 url 2번째는 보내는 데이터
+            $.post("http://192.168.0.101:8080/api/idcheck",data ,function (res){
+                console.log(res.result);
+            })
+        })
+    })
+
+</script>
+
+</body>
+</html>
