@@ -16,7 +16,12 @@
         type : 'POST',
         data : JSON.stringify(data),
         contentType : "application/json",
-        dataType : "json"
+        dataType : "json",
+        //res가 String인지 Object인지 꼭 확인하기
+        success : function (res){
+            console.log(res)
+        }
+
     })
 </script>
 
