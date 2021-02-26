@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div class="box">
+    <button class="btn b1">B1</button>
+    <button class="btn b2">B2</button>
+    <button class="btn b3">B3</button>
+</div>
+<script>
+
+    const box = $(".box")
+    //not만 제외하고 숨긴다
+    // box.find("button").not('.b1').hide();
+    //nth child만 제외
+    box.find("buttonㅣnth-child(1)").hide();
+    //루프를 돌며 opaticy값이 계속 바뀐다.
+    box.animate({opacity:0.9},3000);
+
+
+
+</script>
+</body>
+</html>
