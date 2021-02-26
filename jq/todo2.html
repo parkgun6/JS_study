@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="addDiv">
+    <input name="title">
+    <button class="addBtn">ADD</button>
+</div>
+<style>
+    .todoUL {
+        width:100%;
+        height: 200px;
+        background-color: yellow;
+    }
+</style>
+<ul class="todoUL"></ul>
+
+<script>
+    let todoService = (function() {
+
+        let todos = []
+
+        function add(todo){
+            todos.push(todo)
+            console.log(todos);
+        }
+        function remove(idx){
+            todos.splice(idx,1)
+        }
+        function getList(){
+            return todos;
+        }
+        function update(idx, todo){
+            todos[idx] = todo
+        }
+        return {add:add, remove:remove, getList:getList, update:update}
+    }())
+</script>
+<script>
+    $(document).ready(function(){
+        const input = $("input[name='title']")
+        const addBtn = $(".addBtn")
+        const todoUL = $(".todoUL")
+
+        addBtn.on("click", function(e){
+            const titleStr = input.val()
+            console.log(titleStr)
+
+            if(e.target.innerHTML  === 'ADD'){
+                todoService.add(titleStr);
+            }else {
+                const idx = input.data("idx")
+                const todo = input.val()
+                todoService.update(idx,todo)
+                addBtn.text("ADD")
+            }
+            input.val("")
+            showList()
+
+        });
+
+        function showList(){
+            let todos = todoService.getList();
+            todoUL.html("")
+            var idx = 0;
+            for (const todoStr of todos) {
+                console.log(todoStr)
+                todoUL.append("<li data-idx='"+ idx++ +"'><button class='delBtn'>DEL</button>"+todoStr+"</li>")
+
+            }
+        }
+
+        todoUL.on("click", ".delBtn", function(e){
+
+            console.log(this)
+
+            const liObj = $(this).closest("li");
+            const idx = liObj.data("idx");
+            console.log(liObj, idx)
+            todoService.remove(idx)
+            showList()
+        })
+
+        todoUL.on("click", "li", function(){
+            let liObj = $(this).clone()
+
+            liObj.find("button").remove()
+
+            const idx = liObj.data("idx")
+
+            input.val(liObj.text()).attr("data-idx", idx)
+
+            addBtn.text("MOD")
+
+        });
+    })
+</script>
+</body>
+</html>
