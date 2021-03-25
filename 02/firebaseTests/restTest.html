@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<script>
+    const service=(function (){
+
+        function getList(obj) {
+            return fetch("http://localhost:8080/getStore?name=Test1",
+                {
+                    method: 'get'
+                }
+            ).then(res => res.json())
+        }
+
+        return {getList:getList}
+    })();
+
+    console.log(service.getList().then(res => console.log(res)))
+
+</script>
+
+</body>
+</html>
