@@ -42,14 +42,15 @@
             const second = date.getSeconds();
             return year +"/"+ month +"/"+ day+" "+hour+":"+min+":"+second;
         }console.log(today());
+        console.log(date);
         const data = {
             store: document.querySelector("input[name='store']").value,
             menu: document.querySelector("input[name='menu']").value,
             idx: document.querySelector("input[name='idx']").value,
-            time: today()
+            time: date
         }
         insert(data);
-    /*db.collection("Tests").add({
+/*    db.collection("Tests").add({
         store: document.querySelector("input[name='store']").value,
         menu: document.querySelector("input[name='menu']").value,
         idx: document.querySelector("input[name='idx']").value,
@@ -61,8 +62,8 @@
         .catch((error) => {
             console.error("Error adding document: ", error);
         });*/
-/*
-        db.collection("Tests").doc(today()).set({
+
+/*        db.collection("Tests").doc(today()).set({
             idx: document.querySelector("input[name='idx']").value,
             time: today()
         })
@@ -76,15 +77,32 @@
 
 /*---------------------------데이터 조회---------------------------------*/
 
-    db.collection("Tests").where("store","==","123","time","desc").get().then((querySnapshot) => {
+    db.collection("Tests").orderBy("time","desc").limit(10).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-
+            //console.log(`${doc.id} => ${doc.data()}`);
+            console.log(doc.id)//이거 ?
+            const temp = doc.id;
+            console.log("tmp: ", temp);
             arr.push(doc.data());
             console.log(arr);
+            arr.forEach(res => {
+                //console.log(res.time)
+                //console.log(res.time.nanoseconds);
+                //let d1 = new Date(Number(res.time.seconds) * 1000);
+                //console.log("d1: ",d1);
+                //const secToDate = new Date(res.time);
+                //console.log((secToDate))
+                //console.log(res)})
+
+            });
         });
     });
 
+    function getOrder() {
+        return fetch("http://localhost:8080/getOrder?store=123", {
+            method: 'get'
+        }).then(res => console.log(res.json()))
+    }getOrder()//.then(result => console.log(result))
 /*---------------------------실시간 데이터 조회----------------------------*/
 
     db.collection("Tests").orderBy("store").onSnapshot(doc => {
